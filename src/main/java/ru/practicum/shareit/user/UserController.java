@@ -17,26 +17,40 @@ public class UserController {
     UserService userService;
     @GetMapping
     public Map<Integer, User> getUsers() {
-        return userService.getUsers();
+        log.info("Get users");
+        Map<Integer, User> users = userService.getUsers();
+        log.info("Users: {}", users);
+        return users;
     }
 
     @GetMapping("/{userId}")
     public UserDto getUser(@PathVariable("userId") int id) {
-        return userService.getUser(id);
+        log.info("Get user: {}", id);
+        UserDto user = userService.getUser(id);
+        log.info("User: {}", user);
+        return user;
     }
 
     @PostMapping
     public UserDto addUser(@RequestBody UserDto userDto) {
-        return userService.addUser(userDto);
+        log.info("Add user: {}", userDto);
+        UserDto user = userService.addUser(userDto);
+        log.info("User: {}", user);
+        return user;
     }
 
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable("userId") int id, @RequestBody UserDto userDto) {
-        return userService.updateUser(id, userDto);
+        log.info("Update user: {}", userDto);
+        UserDto user = userService.updateUser(id, userDto);
+        log.info("User: {}", user);
+        return user;
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") int id) {
+        log.info("Delete user: {}", id);
         userService.deleteUser(id);
+        log.info("User deleted");
     }
 }
