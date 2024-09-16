@@ -23,7 +23,7 @@ public class ItemController {
     ItemService itemService;
     @Autowired
     UserService userService;
-    private final String SHARER_USER_ID = "X-Sharer-User-Id";
+    private static final String SHARER_USER_ID = "X-Sharer-User-Id";
 
     @GetMapping
     public List<ItemDto> getAllItemsOfUser(@RequestHeader(SHARER_USER_ID) Integer userId) {
