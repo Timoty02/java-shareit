@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 @Slf4j
 @Service
 public class UserService {
@@ -22,14 +23,16 @@ public class UserService {
     @Getter
     Set<String> emails = new HashSet<>();
     private int id = 1;
+
     @Autowired
     public UserService() {
     }
+
     public UserDto addUser(UserDto userDto) {
         log.info("Adding user: {}", userDto);
         try {
             validate(userDto);
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
         }
         User user = UserMapper.toUser(userDto);
@@ -39,6 +42,7 @@ public class UserService {
         log.info("User added: {}", user);
         return UserMapper.toUserDto(user);
     }
+
     public UserDto getUser(int id) {
         log.info("Getting user with id: {}", id);
         if (!users.containsKey(id)) {
@@ -68,27 +72,30 @@ public class UserService {
             emails.add(userDto.getEmail());
             log.info("User updated: {}", user);
             return UserMapper.toUserDto(user);
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
         }
 
     }
+
     public void deleteUser(int id) {
         log.info("Deleting user with id: {}", id);
         users.remove(id);
         log.info("User deleted");
     }
+
     private void validate(UserDto userDto) {
         if (userDto.getEmail() == null || userDto.getName() == null || userDto.getName().isBlank()
                 || userDto.getEmail().isBlank() || emails.contains(userDto.getEmail()) || !validateEmail(userDto.getEmail())) {
             throw new ValidationException("Validation exception");
         }
     }
+
     private void validateUpdate(UserDto userDto) {
         if ((userDto.getName() != null && userDto.getName().isBlank()) ||
                 (userDto.getEmail() != null && (userDto.getEmail().isBlank() ||
-                emails.contains(userDto.getEmail()) ||
-                !validateEmail(userDto.getEmail())))) {
+                        emails.contains(userDto.getEmail()) ||
+                        !validateEmail(userDto.getEmail())))) {
             throw new ValidationException("Email and name cannot be blank");
         }
     }

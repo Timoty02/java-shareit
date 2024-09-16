@@ -15,6 +15,7 @@ import java.util.Map;
 public class UserController {
     @Autowired
     UserService userService;
+
     @GetMapping
     public Map<Integer, User> getUsers() {
         log.info("Get users");
