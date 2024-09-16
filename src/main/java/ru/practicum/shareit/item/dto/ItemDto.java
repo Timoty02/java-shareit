@@ -4,12 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 /**
  * TODO Sprint add-controllers.
  */
 @Data
 @NoArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class ItemDto {
     Integer id;
     @NotBlank
