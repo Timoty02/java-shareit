@@ -3,24 +3,22 @@ package ru.practicum.shareit.item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
 public class ItemService {
-    private int id = 1;
-    Map<Integer, Item> items = new HashMap<>();
+    private final ItemRepository repository;
 
     @Autowired
-    public ItemService() {
+    public ItemService(ItemRepository repository) {
+        this.repository = repository;
     }
 
     public ItemDto addItem(ItemDto itemDto, User user) {
@@ -31,31 +29,23 @@ public class ItemService {
             throw new IllegalArgumentException(e.getMessage());
         }
         Item item = ItemMapper.toItem(itemDto);
-        item.setId(id++);
         item.setOwner(user);
-        items.put(item.getId(), item);
-        log.info("Item added: {}", item);
-        return ItemMapper.toItemDto(item);
+        Item item1 = repository.save(item);
+        log.info("Item added: {}", item1);
+        return ItemMapper.toItemDto(item1);
     }
 
     public List<ItemDto> getAllItemsOfUser(int userId) {
-        List<ItemDto> userItems = new ArrayList<>();
-        for (Item item : items.values()) {
-            if (item.getOwner().getId() == userId) {
-                userItems.add(ItemMapper.toItemDto(item));
-            }
-        }
-        return userItems;
+        List<Item> userItems = repository.findAllByOwner(userId);
+        return userItems.stream().map(ItemMapper::toItemDto).toList();
     }
 
     public ItemDto updateItem(ItemDto itemDto, int id) {
         log.info("Updating item: {}", itemDto);
-        if (!items.containsKey(id)) {
-            throw new IllegalArgumentException("Item not found");
-        }
         try {
             validateUpdate(itemDto);
-            Item item = items.get(id);
+            Optional<Item> itemOptional = repository.findById(id);
+            Item item = itemOptional.orElseThrow(() -> new NotFoundException("Item not found"));
             if (itemDto.getName() != null) {
                 item.setName(itemDto.getName());
             }
@@ -65,9 +55,9 @@ public class ItemService {
             if (itemDto.getAvailable() != null) {
                 item.setAvailable(itemDto.getAvailable());
             }
-            items.put(item.getId(), item);
-            log.info("Item updated: {}", item);
-            return ItemMapper.toItemDto(item);
+            Item itemUp = repository.save(item);
+            log.info("Item updated: {}", itemUp);
+            return ItemMapper.toItemDto(itemUp);
         } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
         }
@@ -75,25 +65,25 @@ public class ItemService {
     }
 
     public ItemDto getItem(int id) {
-        return ItemMapper.toItemDto(items.get(id));
+        log.info("Getting item with id: {}", id);
+        Optional<Item> itemOptional = repository.findById(id);
+        Item item = itemOptional.orElseThrow(() -> new NotFoundException("Item not found"));
+        log.info("Item found: {}", item);
+        return ItemMapper.toItemDto(item);
     }
 
     public void deleteItem(int id) {
-        items.remove(id);
+        log.info("Deleting item with id: {}", id);
+        repository.deleteById(id);
+        log.info("Item deleted");
     }
 
     public List<ItemDto> searchItems(String text) {
-        List<ItemDto> foundItems = new ArrayList<>();
         if (text.isBlank()) {
-            return foundItems;
+            return new ArrayList<>();
         }
-        for (Item item : items.values()) {
-            if ((item.getName().toLowerCase().contains(text.toLowerCase()) ||
-                    item.getDescription().toLowerCase().contains(text.toLowerCase())) && item.getAvailable()) {
-                foundItems.add(ItemMapper.toItemDto(item));
-            }
-        }
-        return foundItems;
+        List<Item> items = repository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(text, text);
+        return items.stream().map(ItemMapper::toItemDto).toList();
     }
 
     private void validateItem(ItemDto itemDto) {

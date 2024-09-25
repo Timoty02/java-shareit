@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,9 +18,9 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public Map<Integer, User> getUsers() {
+    public List<UserDto> getUsers() {
         log.info("Get users");
-        Map<Integer, User> users = userService.getUsers();
+        List<UserDto> users= userService.getUsers();
         log.info("Users: {}", users);
         return users;
     }
