@@ -42,8 +42,9 @@ public class BookingService {
         }
         booking.setItem(item);
         booking.setStatus(BookingStatus.WAITING);
+        Booking bookingUp = bookingRepository.save(booking);
         log.info("Booking created: {}", booking);
-        return BookingMapper.toBookingDto(bookingRepository.save(booking));
+        return BookingMapper.toBookingDto(bookingUp);
     }
 
     public BookingDto getBookingById(int bookingId, int userId) {

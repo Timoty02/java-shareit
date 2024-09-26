@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.annotations.FutureOrPresentWithGracePeriod;
 import ru.practicum.shareit.exceptions.ValidationException;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class BookingCreateSample {
     @NotNull
-    @Future
+    @FutureOrPresentWithGracePeriod
     LocalDateTime start;
     @NotNull
     @Future

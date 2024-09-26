@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
+
 @Data
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @AllArgsConstructor
@@ -26,6 +27,5 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "author_id")
     User author;
-    @Transient
-    LocalDateTime created;
+    LocalDateTime created = LocalDateTime.now();
 }

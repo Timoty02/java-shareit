@@ -29,7 +29,9 @@ public class BookingController {
     @PostMapping
     public BookingDto createBooking(@RequestHeader(SHARER_USER_ID) Integer userId, @RequestBody @Valid BookingCreateSample bookingDto) {
         log.info("Create booking: {}", bookingDto);
-        return bookingService.createBooking(bookingDto, userId);
+        BookingDto booking = bookingService.createBooking(bookingDto, userId);
+        log.info("Booking created: {}", booking);
+        return booking;
     }
 
     @PatchMapping("/{bookingId}")
