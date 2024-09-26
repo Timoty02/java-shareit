@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * TODO Sprint add-controllers.
@@ -20,7 +19,7 @@ public class UserController {
     @GetMapping
     public List<UserDto> getUsers() {
         log.info("Get users");
-        List<UserDto> users= userService.getUsers();
+        List<UserDto> users = userService.getUsers();
         log.info("Users: {}", users);
         return users;
     }

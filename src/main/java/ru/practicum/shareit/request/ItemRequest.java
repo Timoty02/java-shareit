@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import ru.practicum.shareit.user.User;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -21,5 +20,5 @@ public class ItemRequest {
     @ManyToOne
     @JoinColumn(name = "requester_id")
     User requester;
-    Instant created;
+    LocalDateTime created;
 }

@@ -1,14 +1,13 @@
 package ru.practicum.shareit.user;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 
-import java.util.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +34,7 @@ public class UserService {
         log.info("User added: {}", userAdd);
         return UserMapper.toUserDto(userAdd);
     }
+
     public List<UserDto> getUsers() {
         log.info("Getting all users");
         List<User> users = repository.findAll();
