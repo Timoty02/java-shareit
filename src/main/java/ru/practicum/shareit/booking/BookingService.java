@@ -60,7 +60,7 @@ public class BookingService {
     public BookingDto updateBooking(int bookingId, int userId, Boolean approved) {
         log.info("Updating booking with id: {}", bookingId);
         Booking booking = bookingRepository.findById(bookingId)
-                        .orElseThrow(() -> new NotFoundException("Booking not found"));
+                .orElseThrow(() -> new NotFoundException("Booking not found"));
         if (booking.getItem().getOwner().getId() != userId) {
             throw new AccessDeniedException("Access denied");
         }

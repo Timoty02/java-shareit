@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FutureOrPresentWithGracePeriod {
-    String message() default "Дата должна быть в будущем или настоящем с учетом задержки";
+    String message() default "DateTime must be in the future or present, with a possible margin of error of 5 seconds";
 
     Class<?>[] groups() default {};
 

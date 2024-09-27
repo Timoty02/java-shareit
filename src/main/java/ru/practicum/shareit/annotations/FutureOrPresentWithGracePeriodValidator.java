@@ -18,7 +18,7 @@ public class FutureOrPresentWithGracePeriodValidator implements ConstraintValida
         if (dateTime == null) {
             return true;
         }
-        LocalDateTime nowWithGrace = LocalDateTime.now().minusSeconds(5); // Преобразуем миллисекунды в наносекунды
+        LocalDateTime nowWithGrace = LocalDateTime.now().minusSeconds(5);
         return !dateTime.isBefore(nowWithGrace);
     }
 }
