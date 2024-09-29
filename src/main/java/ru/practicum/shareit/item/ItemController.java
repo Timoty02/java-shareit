@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentReceiver;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserMapper;
@@ -62,9 +64,9 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@PathVariable Integer itemId) {
+    public ItemDto getItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable Integer itemId) {
         log.info("Get item: {}", itemId);
-        return itemService.getItem(itemId);
+        return itemService.getItem(itemId, userId);
     }
 
     @DeleteMapping("/{itemId}")
@@ -77,5 +79,11 @@ public class ItemController {
     public List<ItemDto> searchItems(@RequestParam String text) {
         log.info("Search items: {}", text);
         return itemService.searchItems(text);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable Integer itemId, @RequestBody @Valid CommentReceiver comment) {
+        log.info("Add comment: {} from user with id:{} ", comment, userId);
+        return itemService.addComment(userId, itemId, comment);
     }
 }

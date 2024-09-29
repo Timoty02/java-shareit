@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * TODO Sprint add-controllers.
  */
@@ -20,6 +24,9 @@ public class ItemDto {
     String description;
     @NotNull
     Boolean available;
+    LocalDateTime nextBooking;
+    LocalDateTime lastBooking;
+    List<CommentDto> comments = new ArrayList<>();
 
     public ItemDto(String name, String description, Boolean available) {
         this.name = name;
