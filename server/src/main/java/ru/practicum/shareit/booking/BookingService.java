@@ -76,22 +76,22 @@ public class BookingService {
         log.info("Getting all bookings for user with id: {}", userId);
         List<Booking> bookings = new ArrayList<>();//bookingRepository.findAllByBookerId(userId);
         switch (status) {
-            case ALL:
+            case BookingDtoStatus.ALL:
                 bookings = bookingRepository.findAllByBookerId(userId);
                 break;
-            case CURRENT:
+            case BookingDtoStatus.CURRENT:
                 bookings = bookingRepository.findAllByBookerIdAndCurrent(userId);
                 break;
-            case PAST:
+            case BookingDtoStatus.PAST:
                 bookings = bookingRepository.findAllByBookerIdAndPast(userId);
                 break;
-            case FUTURE:
+            case BookingDtoStatus.FUTURE:
                 bookings = bookingRepository.findAllByBookerIdAndFuture(userId);
                 break;
-            case WAITING:
+            case BookingDtoStatus.WAITING:
                 bookings = bookingRepository.findAllByBookerIdAndStatus(userId, BookingStatus.WAITING.name());
                 break;
-            case REJECTED:
+            case BookingDtoStatus.REJECTED:
                 bookings = bookingRepository.findAllByBookerIdAndStatus(userId, BookingStatus.REJECTED.name());
                 break;
         }
@@ -102,22 +102,22 @@ public class BookingService {
         log.info("Getting all bookings for owner with id: {}", userId);
         List<Booking> bookings = new ArrayList<>();//bookingRepository.findAllByOwnerId(userId);
         switch (status) {
-            case ALL:
+            case BookingDtoStatus.ALL:
                 bookings = bookingRepository.findAllByOwnerId(userId);
                 break;
-            case CURRENT:
+            case BookingDtoStatus.CURRENT:
                 bookings = bookingRepository.findAllByOwnerIdAndCurrent(userId);
                 break;
-            case PAST:
+            case BookingDtoStatus.PAST:
                 bookings = bookingRepository.findAllByOwnerIdAndPast(userId);
                 break;
-            case FUTURE:
+            case BookingDtoStatus.FUTURE:
                 bookings = bookingRepository.findAllByOwnerIdAndFuture(userId);
                 break;
-            case WAITING:
+            case BookingDtoStatus.WAITING:
                 bookings = bookingRepository.findAllByOwnerIdAndStatus(userId, BookingStatus.WAITING.name());
                 break;
-            case REJECTED:
+            case BookingDtoStatus.REJECTED:
                 bookings = bookingRepository.findAllByOwnerIdAndStatus(userId, BookingStatus.REJECTED.name());
                 break;
         }
