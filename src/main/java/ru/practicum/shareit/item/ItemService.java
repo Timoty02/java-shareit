@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentReceiver;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -25,13 +26,15 @@ public class ItemService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Autowired
-    public ItemService(ItemRepository repository, CommentRepository commentRepository, UserRepository userRepository, BookingRepository bookingRepository) {
+    public ItemService(ItemRepository repository, CommentRepository commentRepository, UserRepository userRepository, BookingRepository bookingRepository, ItemRequestRepository itemRequestRepository) {
         this.itemRepository = repository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
+        this.itemRequestRepository = itemRequestRepository;
     }
 
     public ItemDto addItem(ItemDto itemDto, User user) {
@@ -43,6 +46,7 @@ public class ItemService {
         }
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(user);
+        if (itemDto.getRequestId()!=null) {item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Request not found")));}
         Item item1 = itemRepository.save(item);
         log.info("Item added: {}", item1);
         return ItemMapper.toItemDto(item1);

@@ -24,6 +24,7 @@ public class ItemDto {
     String description;
     @NotNull
     Boolean available;
+    Integer requestId;
     LocalDateTime nextBooking;
     LocalDateTime lastBooking;
     List<CommentDto> comments = new ArrayList<>();
