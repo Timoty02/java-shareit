@@ -25,7 +25,7 @@ public class ItemRequestService {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
     }
-    public ItemRequestDto createItemRequest(Integer userId, ItemRequestReceiver itemRequestReceiver) {
+    public ItemRequestDto addItemRequest(Integer userId, ItemRequestReceiver itemRequestReceiver) {
         log.info("Creating item request");
         ItemRequest  itemRequest = new ItemRequest();
         itemRequest.setDescription(itemRequestReceiver.getDescription());

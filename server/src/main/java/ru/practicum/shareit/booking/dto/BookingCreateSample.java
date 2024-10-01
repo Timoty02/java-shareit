@@ -27,6 +27,10 @@ public class BookingCreateSample {
         validate();
     }
 
+    public BookingCreateSample() {
+
+    }
+
     private void validate() {
         if (start.isEqual(end)) {
             throw new ValidationException("Start date must not be equal to end date");

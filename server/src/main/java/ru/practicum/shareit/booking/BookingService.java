@@ -30,7 +30,7 @@ public class BookingService {
         this.itemRepository = itemRepository;
     }
 
-    public BookingDto createBooking(BookingCreateSample bookingDto, int userId) {
+    public BookingDto addBooking(BookingCreateSample bookingDto, int userId) {
         log.info("Creating booking: {}", bookingDto);
         Booking booking = new Booking();
         booking.setStart(bookingDto.getStart());

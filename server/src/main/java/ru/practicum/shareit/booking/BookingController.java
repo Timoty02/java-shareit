@@ -29,7 +29,7 @@ public class BookingController {
     @PostMapping
     public BookingDto createBooking(@RequestHeader(SHARER_USER_ID) Integer userId, @RequestBody @Valid BookingCreateSample bookingDto) {
         log.info("Create booking: {}", bookingDto);
-        BookingDto booking = bookingService.createBooking(bookingDto, userId);
+        BookingDto booking = bookingService.addBooking(bookingDto, userId);
         log.info("Booking created: {}", booking);
         return booking;
     }

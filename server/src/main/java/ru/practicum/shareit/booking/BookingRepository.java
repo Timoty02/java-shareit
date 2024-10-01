@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "SELECT * FROM bookings WHERE booker_id = ?1", nativeQuery = true)
@@ -40,8 +41,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findAllByBookerAndItemAndStatus(int userId, int itemId, String status);
 
     @Query(value = "SELECT * FROM bookings WHERE item_id = ?1 AND end_date < NOW() ORDER BY end_date DESC LIMIT 1", nativeQuery = true)
-    Booking findLastBookingByItemId(int itemId);
+    Optional<Booking> findLastBookingByItemId(int itemId);
 
     @Query(value = "SELECT * FROM bookings WHERE item_id = ?1 AND start_date > NOW() ORDER BY start_date ASC LIMIT 1", nativeQuery = true)
-    Booking findNextBookingByItemId(int itemId);
+    Optional<Booking> findNextBookingByItemId(int itemId);
 }

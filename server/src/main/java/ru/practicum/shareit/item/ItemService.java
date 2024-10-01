@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.exceptions.NotFoundException;
@@ -37,19 +38,22 @@ public class ItemService {
         this.itemRequestRepository = itemRequestRepository;
     }
 
-    public ItemDto addItem(ItemDto itemDto, User user) {
+    public ItemDto addItem(ItemDto itemDto, int userId) {
         log.info("Adding item: {}", itemDto);
         try {
             validateItem(itemDto);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            Item item = ItemMapper.toItem(itemDto);
+            item.setOwner(user);
+            if (itemDto.getRequestId()!=null) {item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Request not found")));}
+            Item item1 = itemRepository.save(item);
+            log.info("Item added: {}", item1);
+            return ItemMapper.toItemDto(item1);
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
         }
-        Item item = ItemMapper.toItem(itemDto);
-        item.setOwner(user);
-        if (itemDto.getRequestId()!=null) {item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Request not found")));}
-        Item item1 = itemRepository.save(item);
-        log.info("Item added: {}", item1);
-        return ItemMapper.toItemDto(item1);
     }
 
     public List<ItemDto> getAllItemsOfUser(int userId) {
@@ -57,12 +61,16 @@ public class ItemService {
         return userItems.stream().map(ItemMapper::toItemDto).toList();
     }
 
-    public ItemDto updateItem(ItemDto itemDto, int id) {
+    public ItemDto updateItem(ItemDto itemDto, int id, int userId) {
         log.info("Updating item: {}", itemDto);
         try {
             validateUpdate(itemDto);
             Optional<Item> itemOptional = itemRepository.findById(id);
             Item item = itemOptional.orElseThrow(() -> new NotFoundException("Item not found"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            if (item.getOwner().getId() != user.getId()) {
+                throw new NotFoundException("User is not the owner of the item");
+            }
             if (itemDto.getName() != null) {
                 item.setName(itemDto.getName());
             }
@@ -88,17 +96,31 @@ public class ItemService {
         ItemDto itemDto = ItemMapper.toItemDto(item);
         List<Comment> comments = commentRepository.findAllByItemId(id);
         log.info("Comments: {}", comments);
-        itemDto.setComments(commentRepository.findAllByItemId(id).stream().map(comment -> {
-            CommentDto commentDto = new CommentDto();
-            commentDto.setId(comment.getId());
-            commentDto.setText(comment.getText());
-            commentDto.setAuthorName(comment.getAuthor().getName());
-            commentDto.setCreated(comment.getCreated());
-            return commentDto;
-        }).toList());
+        if  (comments.isEmpty()) {
+            itemDto.setComments(new ArrayList<>());
+        } else {
+            itemDto.setComments(commentRepository.findAllByItemId(id).stream().map(comment -> {
+                CommentDto commentDto = new CommentDto();
+                commentDto.setId(comment.getId());
+                commentDto.setText(comment.getText());
+                commentDto.setAuthorName(comment.getAuthor().getName());
+                commentDto.setCreated(comment.getCreated());
+                return commentDto;
+            }).toList());
+        }
         if (item.getOwner().getId() == userId) {
-            itemDto.setLastBooking(bookingRepository.findLastBookingByItemId(id).getEnd());
-            itemDto.setNextBooking(bookingRepository.findNextBookingByItemId(id).getStart());
+            try {
+                Booking booking1 = bookingRepository.findLastBookingByItemId(id).orElseThrow(() -> new NotFoundException("Booking not found"));
+                itemDto.setLastBooking(booking1.getEnd());
+            } catch (NotFoundException e) {
+                itemDto.setLastBooking(null);
+            }
+            try {
+                Booking booking2 = bookingRepository.findNextBookingByItemId(id).orElseThrow(() -> new NotFoundException("Booking not found"));
+                itemDto.setNextBooking(booking2.getStart());
+            } catch (NotFoundException e) {
+                itemDto.setNextBooking(null);
+            }
         }
         log.info("Item found: {}", itemDto);
         return itemDto;
