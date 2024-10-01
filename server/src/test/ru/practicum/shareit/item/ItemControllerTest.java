@@ -11,18 +11,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentReceiver;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.exceptions.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ItemController.class)
 public class ItemControllerTest {
@@ -78,7 +77,7 @@ public class ItemControllerTest {
         updatedItemDto.setDescription("Updated Description");
         updatedItemDto.setAvailable(false);
 
-        when(itemService.updateItem(any(ItemDto.class), anyInt(),anyInt())).thenReturn(updatedItemDto);
+        when(itemService.updateItem(any(ItemDto.class), anyInt(), anyInt())).thenReturn(updatedItemDto);
 
         mockMvc.perform(patch("/items/1")
                         .header(USER_ID_HEADER, "1")
@@ -152,6 +151,7 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.authorName").value(commentDto.getAuthorName()))
                 .andExpect(jsonPath("$.created").exists());
     }
+
     @Test
     void testDeleteItem() throws Exception {
         mockMvc.perform(delete("/items/1")

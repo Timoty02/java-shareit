@@ -45,7 +45,9 @@ public class ItemService {
             User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
             Item item = ItemMapper.toItem(itemDto);
             item.setOwner(user);
-            if (itemDto.getRequestId()!=null) {item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Request not found")));}
+            if (itemDto.getRequestId() != null) {
+                item.setRequest(itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Request not found")));
+            }
             Item item1 = itemRepository.save(item);
             log.info("Item added: {}", item1);
             return ItemMapper.toItemDto(item1);
@@ -96,7 +98,7 @@ public class ItemService {
         ItemDto itemDto = ItemMapper.toItemDto(item);
         List<Comment> comments = commentRepository.findAllByItemId(id);
         log.info("Comments: {}", comments);
-        if  (comments.isEmpty()) {
+        if (comments.isEmpty()) {
             itemDto.setComments(new ArrayList<>());
         } else {
             itemDto.setComments(commentRepository.findAllByItemId(id).stream().map(comment -> {

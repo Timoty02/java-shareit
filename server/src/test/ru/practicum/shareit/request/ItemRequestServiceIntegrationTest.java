@@ -12,7 +12,6 @@ import ru.practicum.shareit.request.dto.ItemRequestReceiver;
 import ru.practicum.shareit.user.UserDto;
 import ru.practicum.shareit.user.UserService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

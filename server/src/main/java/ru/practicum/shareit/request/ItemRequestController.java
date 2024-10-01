@@ -29,11 +29,13 @@ public class ItemRequestController {
         log.info("Get item request: {}", requestId);
         return itemRequestService.getItemRequestById(userId, requestId);
     }
+
     @GetMapping
     public Iterable<ItemRequestDto> getAllItemRequestsOfUser(@RequestHeader(SHARER_USER_ID) Integer userId) {
         log.info("Get all item requests");
         return itemRequestService.getAllItemRequestsOfUser(userId);
     }
+
     @GetMapping("/all")
     public Iterable<ItemRequestDto> getAllItemRequests(@RequestHeader(SHARER_USER_ID) Integer userId) {
         log.info("Get all item requests with pagination");

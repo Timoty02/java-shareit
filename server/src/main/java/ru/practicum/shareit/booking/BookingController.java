@@ -38,7 +38,9 @@ public class BookingController {
     public BookingDto updateBooking(@RequestHeader(SHARER_USER_ID) Integer userId,
                                     @PathVariable Integer bookingId, @RequestParam Boolean approved) {
         log.info("Update booking: {}", bookingId);
-        return bookingService.updateBooking(bookingId, userId, approved);
+        BookingDto booking = bookingService.updateBooking(bookingId, userId, approved);
+        log.info("Booking updated: {}", booking);
+        return booking;
     }
 
     @GetMapping

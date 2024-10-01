@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingCreateSample;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.UserDto;
@@ -17,7 +16,7 @@ import ru.practicum.shareit.user.UserService;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -99,7 +98,7 @@ public class BookingServiceIntegrationTest {
         BookingDto adddBooking = bookingService.addBooking(bookingCreateSample, booker.getId());
 
         // Approve the booking
-        BookingDto approvedBooking = bookingService.updateBooking(adddBooking.getId(),owner.getId(), true);
+        BookingDto approvedBooking = bookingService.updateBooking(adddBooking.getId(), owner.getId(), true);
 
         // Verify the booking was approved
         assertEquals(BookingStatus.APPROVED, approvedBooking.getStatus());
@@ -111,7 +110,7 @@ public class BookingServiceIntegrationTest {
         BookingDto adddBooking = bookingService.addBooking(bookingCreateSample, booker.getId());
 
         // Reject the booking
-        BookingDto rejectedBooking = bookingService.updateBooking(adddBooking.getId(),owner.getId(), false);
+        BookingDto rejectedBooking = bookingService.updateBooking(adddBooking.getId(), owner.getId(), false);
 
         // Verify the booking was rejected
         assertEquals(BookingStatus.REJECTED, rejectedBooking.getStatus());

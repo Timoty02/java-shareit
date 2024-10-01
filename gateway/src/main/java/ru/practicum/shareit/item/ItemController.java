@@ -4,14 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exceptions.NotFoundException;
-
-
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -23,7 +18,7 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @GetMapping
-    public ResponseEntity<Object> getAllItemsOfUser(@RequestHeader(SHARER_USER_ID)@Positive Integer userId) {
+    public ResponseEntity<Object> getAllItemsOfUser(@RequestHeader(SHARER_USER_ID) @Positive Integer userId) {
         log.info("Get all items of user: {}", userId);
         log.info("Items of user: {}", userId);
         return itemClient.getAllItems(userId);

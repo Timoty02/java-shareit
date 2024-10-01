@@ -8,8 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReceiver;
 
 import java.time.LocalDateTime;
@@ -18,10 +18,13 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ItemRequestController.class)
 public class ItemRequestControllerTest {
@@ -36,7 +39,7 @@ public class ItemRequestControllerTest {
     private ObjectMapper objectMapper;
 
     private ItemRequestDto itemRequestDto;
-    private ItemRequestReceiver  itemRequestReceiver;
+    private ItemRequestReceiver itemRequestReceiver;
 
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
@@ -110,7 +113,7 @@ public class ItemRequestControllerTest {
     void testGetItemRequestByIdNotFound() throws Exception {
         when(itemRequestService.getItemRequestById(anyInt(), anyInt())).thenThrow(new NotFoundException("Item request not found"));
         mockMvc.perform(get("/requests/1")
-                .header(USER_ID_HEADER, "1"))
+                        .header(USER_ID_HEADER, "1"))
                 .andExpect(status().isNotFound());
     }
 

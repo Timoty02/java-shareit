@@ -1,22 +1,14 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class ItemDto {
-    @NotBlank
-    String name;
+public class ItemRequestReceiver {
     @NotBlank
     String description;
-    @NotNull
-    Boolean available;
-    Integer requestId;
 }

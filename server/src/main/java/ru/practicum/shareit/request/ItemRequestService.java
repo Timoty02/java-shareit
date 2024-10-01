@@ -12,6 +12,7 @@ import ru.practicum.shareit.user.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class ItemRequestService {
@@ -19,21 +20,23 @@ public class ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+
     @Autowired
     public ItemRequestService(ItemRequestRepository itemRequestRepository, UserRepository userRepository, ItemRepository itemRepository) {
         this.itemRequestRepository = itemRequestRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
     }
+
     public ItemRequestDto addItemRequest(Integer userId, ItemRequestReceiver itemRequestReceiver) {
         log.info("Creating item request");
-        ItemRequest  itemRequest = new ItemRequest();
+        ItemRequest itemRequest = new ItemRequest();
         itemRequest.setDescription(itemRequestReceiver.getDescription());
-            User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-            itemRequest.setRequester(user);
-            itemRequestRepository.save(itemRequest);
-            log.info("Item request created: {}", itemRequest);
-            return ItemRequestMapper.toItemRequestDto(itemRequest);
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        itemRequest.setRequester(user);
+        itemRequestRepository.save(itemRequest);
+        log.info("Item request created: {}", itemRequest);
+        return ItemRequestMapper.toItemRequestDto(itemRequest);
     }
 
     public Iterable<ItemRequestDto> getAllItemRequestsOfUser(Integer userId) {

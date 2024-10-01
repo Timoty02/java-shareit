@@ -52,7 +52,7 @@ public class ItemClient extends BaseClient {
         return delete("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> addComment (int userId, int itemId, CommentReceiver commentDto) {
+    public ResponseEntity<Object> addComment(int userId, int itemId, CommentReceiver commentDto) {
         return post("/" + itemId + "/comment", userId, commentDto);
     }
 }
