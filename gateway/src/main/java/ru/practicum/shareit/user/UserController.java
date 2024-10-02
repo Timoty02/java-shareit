@@ -22,8 +22,8 @@ public class UserController {
         return userClient.getAllUsers();
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Object> getUser(@PathVariable("userId") @Positive int id) {
+    @GetMapping("/{user-id}")
+    public ResponseEntity<Object> getUser(@PathVariable("user-id") @Positive int id) {
         log.info("Get user: {}", id);
         return userClient.getUser(id);
     }
@@ -34,14 +34,14 @@ public class UserController {
         return userClient.addUser(userDto);
     }
 
-    @PatchMapping("/{userId}")
-    public ResponseEntity<Object> updateUser(@PathVariable("userId") @Positive int id, @RequestBody UserUpdateDto userDto) {
+    @PatchMapping("/{user-id}")
+    public ResponseEntity<Object> updateUser(@PathVariable("user-id") @Positive int id, @RequestBody UserUpdateDto userDto) {
         log.info("Update user: {}", userDto);
         return userClient.updateUser(id, userDto);
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable("userId") @Positive int id) {
+    @DeleteMapping("/{user-id}")
+    public void deleteUser(@PathVariable("user-id") @Positive int id) {
         log.info("Delete user: {}", id);
         userClient.deleteUser(id);
     }

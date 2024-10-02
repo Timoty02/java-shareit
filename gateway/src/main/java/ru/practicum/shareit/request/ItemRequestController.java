@@ -23,8 +23,8 @@ public class ItemRequestController {
         return itemRequestClient.addItemRequest(userId, itemRequestReceiver);
     }
 
-    @GetMapping("/{requestId}")
-    public ResponseEntity<Object> getItemRequest(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable @Positive Integer requestId) {
+    @GetMapping("/{request-id}")
+    public ResponseEntity<Object> getItemRequest(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable("request-id") @Positive Integer requestId) {
         log.info("Get item request: {}", requestId);
         return itemRequestClient.getItemRequestById(userId, requestId);
     }

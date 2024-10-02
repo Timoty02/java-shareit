@@ -30,21 +30,21 @@ public class ItemController {
         return itemClient.addItem(userId, itemDto);
     }
 
-    @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> updateItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable @Positive Integer itemId, @RequestBody ItemDto itemDto) {
+    @PatchMapping("/{item-id}")
+    public ResponseEntity<Object> updateItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable("item-id") @Positive Integer itemId, @RequestBody ItemDto itemDto) {
         log.info("Update item: {}", itemDto);
         log.info("Item updated: {}", itemDto);
         return itemClient.updateItem(userId, itemId, itemDto);
     }
 
-    @GetMapping("/{itemId}")
-    public ResponseEntity<Object> getItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable @Positive Integer itemId) {
+    @GetMapping("/{item-id}")
+    public ResponseEntity<Object> getItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable("item-id") @Positive Integer itemId) {
         log.info("Get item: {}", itemId);
         return itemClient.getItem(userId, itemId);
     }
 
-    @DeleteMapping("/{itemId}")
-    public void deleteItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable @Positive Integer itemId) {
+    @DeleteMapping("/{item-id}")
+    public void deleteItem(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable("item-id") @Positive Integer itemId) {
         log.info("Delete item: {}", itemId);
         itemClient.deleteItem(userId, itemId);
     }
@@ -55,8 +55,8 @@ public class ItemController {
         return itemClient.searchItems(text);
     }
 
-    @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> addComment(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable @Positive Integer itemId, @RequestBody @Valid CommentReceiver comment) {
+    @PostMapping("/{(item-id)}/comment")
+    public ResponseEntity<Object> addComment(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable("item-id") @Positive Integer itemId, @RequestBody @Valid CommentReceiver comment) {
         log.info("Add comment: {} from user with id:{} ", comment, userId);
         return itemClient.addComment(userId, itemId, comment);
     }
