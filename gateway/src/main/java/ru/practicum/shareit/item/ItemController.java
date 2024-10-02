@@ -55,7 +55,7 @@ public class ItemController {
         return itemClient.searchItems(text);
     }
 
-    @PostMapping("/{(item-id)}/comment")
+    @PostMapping("/{item-id}/comment")
     public ResponseEntity<Object> addComment(@RequestHeader(SHARER_USER_ID) Integer userId, @PathVariable("item-id") @Positive Integer itemId, @RequestBody @Valid CommentReceiver comment) {
         log.info("Add comment: {} from user with id:{} ", comment, userId);
         return itemClient.addComment(userId, itemId, comment);
